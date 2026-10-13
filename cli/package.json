@@ -1,5 +1,5 @@
 {
-  "name": "kyzen",
+  "name": "kyzen-cli",
   "version": "0.1.0",
   "description": "Kyzen Network's read-only command line: chip stock feeds, stage indices, blocks and contract verification on Robinhood Chain.",
   "license": "MIT",

@@ -7,8 +7,10 @@
 Node 20 or later:
 
 ```sh
-npm i -g https://kyzen.network/dl/kyzen-0.1.0.tgz
+npm i -g kyzen-cli
 ```
+
+The command it installs is `kyzen`. The same package is served by Kyzen Network itself: `npm i -g https://kyzen.network/dl/kyzen-0.1.0.tgz`.
 
 ## Commands
 

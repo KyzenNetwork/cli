@@ -2,14 +2,14 @@
 // bundled in, no dependencies, then the npm tarball the site serves at /dl/kyzen-<version>.tgz.
 // Run from the repo root: node cli/build.mjs
 import { execFileSync } from "node:child_process";
-import { copyFile, mkdir, readFile, rm, stat } from "node:fs/promises";
+import { copyFile, mkdir, readFile, rename, rm, stat } from "node:fs/promises";
 import path from "node:path";
 import { rolldown } from "rolldown";
 
 const root = process.cwd();
 const cli = path.join(root, "cli");
 const pkgDir = path.join(cli, "pkg");
-const { version } = JSON.parse(await readFile(path.join(cli, "package.json"), "utf8"));
+const { name, version } = JSON.parse(await readFile(path.join(cli, "package.json"), "utf8"));
 
 await rm(pkgDir, { recursive: true, force: true });
 await mkdir(pkgDir, { recursive: true });
@@ -29,5 +29,7 @@ for (const f of ["package.json", "README.md", "LICENSE"]) await copyFile(path.jo
 const dl = path.join(root, "public", "dl");
 await mkdir(dl, { recursive: true });
 execFileSync("npm", ["pack", "--pack-destination", dl], { cwd: pkgDir, stdio: ["ignore", "ignore", "inherit"] });
+// npm names the file after the package (kyzen-cli); the site serves it as kyzen-<version>.tgz.
 const tgz = path.join(dl, `kyzen-${version}.tgz`);
+if (name !== "kyzen") await rename(path.join(dl, `${name}-${version}.tgz`), tgz);
 console.log(`built ${path.relative(root, tgz)} (${((await stat(tgz)).size / 1024).toFixed(0)} KB), bundle ${((await stat(path.join(pkgDir, "kyzen.js"))).size / 1024).toFixed(0)} KB`);
