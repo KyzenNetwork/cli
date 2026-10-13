@@ -5,6 +5,10 @@
   "license": "MIT",
   "author": "Kyzen Network",
   "homepage": "https://kyzen.network/cli",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KyzenNetwork/cli.git"
+  },
   "bin": {
     "kyzen": "kyzen.js"
   },

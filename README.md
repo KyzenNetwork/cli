@@ -44,6 +44,6 @@ npm run build
 - `cli/`: the CLI itself and the published package's manifest.
 - `src/`: the files it shares with the Kyzen Network app, at the same paths: the Robinhood Chain networks and the recorded deployments, the Chainlink stock feeds, the four stage indices' baskets, the Multicall3 reads and the round history reader. The app and the CLI read the same addresses from the same files.
 
-Docs: https://docs.kyzen.network/cli
+Docs: https://docs.kyzen.network/cli · Source: https://github.com/KyzenNetwork/cli
 
 MIT License.

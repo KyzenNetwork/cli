@@ -27,6 +27,6 @@ Options: `--rpc <url>` reads through another Robinhood Chain RPC; `--no-color` (
 
 Chainlink feeds and contracts on Robinhood Chain (chain ID 4663) through the public RPC and Multicall3, contract sources on Sourcify, and the SI Gateway's health at `https://app.kyzen.network/v1/health`. Nothing else, and nothing is sent.
 
-Docs: https://docs.kyzen.network/cli
+Docs: https://docs.kyzen.network/cli · Source: https://github.com/KyzenNetwork/cli
 
 MIT License.
