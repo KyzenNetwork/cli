@@ -4,6 +4,7 @@ import { STOCK_INDICES } from "../../src/components/docs/content/silicon-markets
 import { deployments } from "../../src/data/deployments";
 import { networks } from "../../src/data/networks";
 import { STOCK_TICKERS, stockFeed } from "../../src/data/stock-feeds";
+import { banner, BANNER_WIDTH, gradient } from "./banner";
 import { landed, STEP_BLOCKS } from "./commands/chain";
 import { verdict } from "./commands/verify";
 import { CONTRACTS, FEEDS, indexOf, MAINNET } from "./config";
@@ -109,5 +110,26 @@ describe("terminal output", () => {
     setColour(false);
     expect(t.map(visible)).toEqual([11, 11]);
     expect(fixed(["a", "b", "c"], [3, 2])).toBe("a    b   c");
+  });
+});
+
+describe("banner", () => {
+  it("spells the full name: KYZEN in block letters over NETWORK, then the tagline", () => {
+    const lines = banner(120);
+    expect(lines).toHaveLength(9);
+    expect(lines.slice(0, 6).every((l) => Array.from(l).length === BANNER_WIDTH)).toBe(true);
+    expect(lines[6].trim()).toBe("N E T W O R K");
+    expect(Array.from(lines[6]).length).toBe(BANNER_WIDTH);
+    expect(lines[8]).toBe("Tokenized intelligence, backed by chip equity.");
+  });
+
+  it("leaves a terminal narrower than the banner without one", () => {
+    expect(banner(BANNER_WIDTH)).toEqual([]);
+  });
+
+  it("runs its gradient from light blue through the brand blue (#3B82F6)", () => {
+    expect(gradient(0)).toEqual([165, 200, 255]);
+    expect(gradient(0.5)).toEqual([59, 130, 246]);
+    expect(gradient(1)).toEqual([37, 99, 235]);
   });
 });

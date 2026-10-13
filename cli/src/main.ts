@@ -6,6 +6,7 @@ import { status } from "./commands/status";
 import { verify } from "./commands/verify";
 import { loop, type Context } from "./context";
 import { clientOf, withRpc } from "./rpc";
+import { banner } from "./banner";
 import { accent, bold, dim, out, setColour } from "./ui";
 
 // kyzen: Kyzen Network's read-only command line (SPEC 3.8). No keys, no wallet, no token: it reads
@@ -45,6 +46,12 @@ const COMMANDS: [string, string][] = [
 ];
 
 function help(): void {
+  const art = banner();
+  if (art.length > 0) {
+    out();
+    for (const line of art) out(`  ${line}`);
+    out();
+  }
   out(`${accent(bold("Kyzen Network"))} ${dim(`CLI ${VERSION}`)}`);
   out(dim("Read-only: no keys, no wallet, no token. Public Robinhood Chain data only."));
   out();
@@ -56,10 +63,13 @@ function help(): void {
   for (const [c, what] of COMMANDS) out(`  ${c.padEnd(width)}  ${dim(what)}`);
   out();
   out(bold("Options"));
-  out(`  --rpc <url>   ${dim(`Read through another Robinhood Chain RPC (default ${MAINNET.rpcUrl})`)}`);
-  out(`  --no-color    ${dim("Plain text (NO_COLOR is honoured too)")}`);
-  out(`  -h, --help    ${dim("This help")}`);
-  out(`  -v, --version ${dim("The version")}`);
+  const OPTIONS: [string, string][] = [
+    ["--rpc <url>", `Read through another Robinhood Chain RPC (default ${MAINNET.rpcUrl})`],
+    ["--no-color", "Plain text (NO_COLOR is honoured too)"],
+    ["-h, --help", "This help"],
+    ["-v, --version", "The version"],
+  ];
+  for (const [o, what] of OPTIONS) out(`  ${o.padEnd(width)}  ${dim(what)}`);
   out();
   out(dim("Docs: https://docs.kyzen.network/cli"));
 }

@@ -1,11 +1,12 @@
-// Terminal output: colour when the terminal shows it (not with NO_COLOR, --no-color or a pipe),
-// tables padded by visible width, sparklines, prices, moves and ages. Every line the CLI prints
+// Terminal output: colour when the terminal shows it or FORCE_COLOR asks (never with NO_COLOR or
+// --no-color), tables padded by visible width, sparklines, prices, moves and ages. Every line the CLI prints
 // follows SPEC 5 (the copy check scans this folder).
 
-let colour = Boolean(process.stdout.isTTY) && !("NO_COLOR" in process.env);
+let colour = (Boolean(process.stdout.isTTY) || Boolean(process.env.FORCE_COLOR)) && !("NO_COLOR" in process.env);
 export const setColour = (on: boolean) => {
   colour = on;
 };
+export const colourOn = () => colour;
 
 const truecolour = /truecolor|24bit/i.test(process.env.COLORTERM ?? "");
 const paint = (open: string, close = "\x1b[39m") => (s: string) => (colour ? `\x1b[${open}m${s}${close}` : s);
