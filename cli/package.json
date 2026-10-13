@@ -1,0 +1,25 @@
+{
+  "name": "kyzen",
+  "version": "0.1.0",
+  "description": "Kyzen Network's read-only command line: chip stock feeds, stage indices, blocks and contract verification on Robinhood Chain.",
+  "license": "MIT",
+  "author": "Kyzen Network",
+  "homepage": "https://kyzen.network/cli",
+  "bin": {
+    "kyzen": "kyzen.js"
+  },
+  "files": [
+    "kyzen.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "robinhood-chain",
+    "chainlink",
+    "cli",
+    "kyzen-network"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "kyzen-cli-source",
+  "private": true,
+  "description": "Source of Kyzen Network's read-only command line. The published package is cli/package.json.",
+  "license": "MIT",
+  "scripts": {
+    "build": "node cli/build.mjs",
+    "test": "vitest run",
+    "typecheck": "tsc -p cli"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.4",
+    "rolldown": "1.2.11",
+    "typescript": "5.9.3",
+    "viem": "2.56.9",
+    "vitest": "5.0.2"
+  }
+}
