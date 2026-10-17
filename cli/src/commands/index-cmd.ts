@@ -5,10 +5,11 @@ import type { Address } from "viem";
 import { indexDocsUrl, INDICES, indexOf, MAINNET, methodologyUrl } from "../config";
 import type { Context } from "../context";
 import { ago, bold, dim, heading, move, out, table, usd } from "../ui";
+import { mainnetSilicon, marketStatus } from "./markets";
 
 // `kyzen index <kDESIGN|kMEMORY|kFAB|kEQUIP>`: the basket, the methodology in short and each
-// component's live price with its move over 24 hours and 7 days. No index level: Silicon is not
-// deployed on mainnet, and a level needs the reference prices its deployment records (SPEC 3.8).
+// component's live price with its move over 24 hours and 7 days, then the index itself on mainnet: its
+// level from the index feed, its synth, its limit and whether its market is open.
 
 const DAY = 86_400;
 
@@ -57,7 +58,18 @@ export async function index(ctx: Context, x: StockIndex): Promise<void> {
   out(`${dim("Full text")}  ${methodologyUrl(x)}`);
   out(`${dim("Docs")}       ${indexDocsUrl(x)}`);
   out();
-  out(dim("Index level: shown once Silicon is deployed on mainnet. Until then each component is shown on its own."));
+  const silicon = await mainnetSilicon(ctx);
+  const m = silicon?.markets.find((k) => k.symbol === x.symbol);
+  if (!m) {
+    out(dim("Index level: no Silicon market for this index is recorded on mainnet."));
+    return;
+  }
+  out(bold("On mainnet"));
+  out(`  ${dim("Index level")}  ${m.price === null ? dim("n/a") : bold(usd(m.price))} ${dim("($100 at deployment)")}`);
+  out(`  ${dim("Market")}       ${marketStatus(m)}`);
+  out(`  ${dim("Limit")}        ${m.price === null ? dim("n/a") : usd(m.debtCeiling * m.price)} ${dim("of synth")}`);
+  out(`  ${dim("Synth")}        ${m.synth}`);
+  out(`  ${dim("Index feed")}   ${m.feed}`);
 }
 
 export { indexOf };

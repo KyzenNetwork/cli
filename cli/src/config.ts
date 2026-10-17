@@ -9,7 +9,7 @@ import { HOSTS } from "../../src/lib/hosts";
 // the stock feeds (src/data/stock-feeds.ts), the four stage indices' baskets (the docs' indices.ts),
 // the recorded deployments (src/data/deployments.ts) and the public hosts (src/lib/hosts.ts).
 
-export const VERSION = "0.1.0";
+export const VERSION = "0.2.0";
 
 export const MAINNET: Network = networks.mainnet;
 export const TESTNET: Network = networks.testnet;
@@ -60,4 +60,36 @@ export function contractsOf(d: Deployment | undefined): Contract[] {
   ];
 }
 
+/**
+ * The two owner transactions that deployed Silicon on mainnet (2026-10-16): the kit, then the deployment
+ * contract that made everything else. Neither is in the recorded deployment's address list.
+ */
+export const SILICON_DEPLOYERS: Contract[] = [
+  { name: "Silicon kit", address: "0xE726f9018fA8b650BfD031001fcfA61f685f8569" },
+  { name: "Silicon deployment", address: "0x614C7f1e9bc345c9e2D809d122999731665d0484" },
+];
+
+const SYMBOLS = ["kDESIGN", "kMEMORY", "kFAB", "kEQUIP"];
+
+/** The Silicon contracts the recorded mainnet deployment names (silicon.* keys); empty before Silicon is recorded. */
+export function siliconContractsOf(d: Deployment | undefined): Contract[] {
+  const o = d?.other ?? {};
+  if (!o["silicon.vault"]) return [];
+  const named: [string, string][] = [
+    ["Silicon vault", "silicon.vault"],
+    ["$KYZN oracle", "silicon.oracle"],
+    ["Market calendar", "silicon.calendar"],
+    ["Silicon fee router", "silicon.feeRouter"],
+    ["Silicon swap adapter", "silicon.swapAdapter"],
+  ];
+  const list: Contract[] = named.filter(([, k]) => o[k]).map(([name, k]) => ({ name, address: o[k] as Address }));
+  for (let i = 0; o[`silicon.markets.${i}.synth`]; i++) {
+    const symbol = SYMBOLS[i] ?? `market ${i}`;
+    list.push({ name: `${symbol} synth`, address: o[`silicon.markets.${i}.synth`] as Address });
+    list.push({ name: `${symbol} index feed`, address: o[`silicon.markets.${i}.feed`] as Address });
+  }
+  return SILICON_DEPLOYERS.concat(list);
+}
+
 export const CONTRACTS: Contract[] = contractsOf(deployments[MAINNET.chainId]);
+export const SILICON_CONTRACTS: Contract[] = siliconContractsOf(deployments[MAINNET.chainId]);

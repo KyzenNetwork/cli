@@ -2,14 +2,16 @@ import { MAINNET, VERSION, indexOf } from "./config";
 import { chain } from "./commands/chain";
 import { index, unknownIndex } from "./commands/index-cmd";
 import { feeds, silicon } from "./commands/silicon";
+import { markets } from "./commands/markets";
 import { status } from "./commands/status";
+import { token } from "./commands/token";
 import { verify } from "./commands/verify";
 import { loop, type Context } from "./context";
 import { clientOf, withRpc } from "./rpc";
 import { banner } from "./banner";
 import { accent, bold, dim, out, setColour } from "./ui";
 
-// kyzen: Kyzen Network's read-only command line (SPEC 3.8). No keys, no wallet, no token: it reads
+// kyzen: Kyzen Network's read-only command line (SPEC 3.8). No keys and no wallet: it reads
 // public Robinhood Chain data and Kyzen Network's public endpoints, nothing else.
 
 export interface Args {
@@ -37,12 +39,14 @@ export function parseArgs(argv: string[]): Args {
 }
 
 const COMMANDS: [string, string][] = [
+  ["token", "$KYZN: price, market cap, supply, burned, staked, Reserve and backing"],
+  ["markets", "The four kSynthetics markets: index level, limit, minted, open or closed"],
   ["silicon [--watch]", "The seven chip stock feeds: price, stage, last 16 rounds, last update"],
-  ["index <name>", "A stage index (kDESIGN, kMEMORY, kFAB, kEQUIP): basket, methodology, live components"],
+  ["index <name>", "A stage index (kDESIGN, kMEMORY, kFAB, kEQUIP): basket, methodology, level, market"],
   ["feeds [--tail]", "The latest price rounds; with --tail, every round as it lands"],
   ["chain [--watch]", "Robinhood Chain blocks as they land: number, transactions, gas"],
-  ["verify", "Each mainnet contract's verified source (Sourcify) and on-chain code hash"],
-  ["status", "Contracts deployed, SI Gateway health, Silicon on testnet"],
+  ["verify", "Each mainnet contract's verified source (Sourcify) and on-chain code hash, Silicon included"],
+  ["status", "Contracts deployed, AI Gateway health, Silicon markets"],
 ];
 
 function help(): void {
@@ -53,7 +57,7 @@ function help(): void {
     out();
   }
   out(`${accent(bold("Kyzen Network"))} ${dim(`CLI ${VERSION}`)}`);
-  out(dim("Read-only: no keys, no wallet, no token. Public Robinhood Chain data only."));
+  out(dim("Read-only: no keys, no wallet. Public Robinhood Chain data only."));
   out();
   out(bold("Usage"));
   out("  kyzen <command> [options]");
@@ -110,6 +114,10 @@ export async function main(argv: string[]): Promise<number> {
       return 0;
     case "verify":
       return verify(ctx);
+    case "token":
+      return token(ctx);
+    case "markets":
+      return markets(ctx);
     case "status":
       await status(ctx);
       return 0;

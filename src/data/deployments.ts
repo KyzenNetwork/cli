@@ -48,8 +48,30 @@ export const deployments: Readonly<Partial<Record<number, Deployment>>> = {
       "multicall3": "0xcA11bde05977b3631167028862bE2a173976CA11",
       "nvda": "0xd0601CE157Db5bdC3162BbaC2a2C8aF5320D9EEC",
       "operator": "0x2Ba4C980AaCcd4896d8418960D26400259C839Bb",
-      "uniswapV2Factory": "0x8bcEaA40B9AcdfAedF85AdF4FF01F5Ad6517937f"
-    }
+      "uniswapV2Factory": "0x8bcEaA40B9AcdfAedF85AdF4FF01F5Ad6517937f",
+      "silicon.calendar": "0x36Ba950661DE825e0f18F00A15f72528E418DA13",
+      "silicon.feeRouter": "0xBdA7dCF5b5c13b531F6cb372480Cbb102A9e6c80",
+      "silicon.markets.0.feed": "0xCedaA68619321C3030D70e807B6ec6678596E4a8",
+      "silicon.markets.0.synth": "0x774F8ad6D1426e8d3F087F44733e5CCfc7094213",
+      "silicon.markets.1.feed": "0xE609230f9dF3EA245E6ce7C5357d4b7480978F22",
+      "silicon.markets.1.synth": "0x0825f9D7EafA50645EDaBa9234A99678065c7651",
+      "silicon.markets.2.feed": "0x70A61EdC4D8cfb3aFedB4E0dfeA179E29f805188",
+      "silicon.markets.2.synth": "0xfb4ee2A6dBcd975e3dBC4447Be45F4f2bCD739d2",
+      "silicon.markets.3.feed": "0xe167aE7ec13842BC06bc7Df4722674EA8399B81e",
+      "silicon.markets.3.synth": "0x3f2170D0a5ceFf90516A4d9E371ADC4702EA202C",
+      "silicon.oracle": "0x7e7D30b49925379dea1CC143E87f5e2C07D7e1DD",
+      "silicon.stockFeeds.AMD": "0x943A29E7ae51A4798823ca9eEd2ed533B2A22C72",
+      "silicon.stockFeeds.ASML": "0xB4106147E8cce40b7d46124090d373A71b70f87D",
+      "silicon.stockFeeds.INTC": "0x3f390C5C24628Ac7C489515402235FeAD71D1913",
+      "silicon.stockFeeds.MU": "0x425EEFdCf05ed6526C3cE61Af99429A228a6d596",
+      "silicon.stockFeeds.NVDA": "0x379EC4f7C378F34a1B47E4F3cbeBCbAC3E8E9F15",
+      "silicon.stockFeeds.SNDK": "0xfb133Fa4B7b385802B693a293606682Df47109A3",
+      "silicon.stockFeeds.TSM": "0x874cF94aa8eC88Fd9560094dD065f2fB3E41Fc2F",
+      "silicon.swapAdapter": "0x595C38190BE3963Be518dCe98415d7860e46468c",
+      "silicon.usdg": "0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168",
+      "silicon.vault": "0x10928537aCB38fac6cA0ACE4A0483c6a0fcbCEab"
+    },
+    "siliconDeployBlock": 90133915
   },
   46630: {
     "chainId": 46630,

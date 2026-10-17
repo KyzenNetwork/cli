@@ -65,8 +65,13 @@ export function spark(values: number[]): string {
 
 const grouped = (n: number, digits: number) => n.toLocaleString("en-US", { minimumFractionDigits: digits, maximumFractionDigits: digits });
 
-/** A USD price: two decimals, four under one dollar. */
-export const usd = (n: number) => `$${grouped(n, Math.abs(n) < 1 ? 4 : 2)}`;
+/** A USD price: two decimals, four under one dollar, three significant digits under a cent ($0.0000221); "$0" for nothing. */
+export const usd = (n: number) => {
+  if (n === 0) return "$0";
+  const a = Math.abs(n);
+  if (a < 0.01) return `$${n.toFixed(Math.min(18, Math.ceil(-Math.log10(a)) + 2))}`;
+  return `$${grouped(n, a < 1 ? 4 : 2)}`;
+};
 export const int = (n: number | bigint) => (typeof n === "bigint" ? n.toLocaleString("en-US") : grouped(n, 0));
 
 /** A move from `from` to `to` as a signed percentage, green up, red down; "0.00%" when flat. */

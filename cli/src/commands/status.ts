@@ -1,12 +1,10 @@
-import { siliconDeployment } from "../../../src/data/silicon";
-import { readSilicon } from "../../../src/data/silicon-chain";
-import { CONTRACTS, GATEWAY_HEALTH, MAINNET, TESTNET, VERSION } from "../config";
+import { CONTRACTS, GATEWAY_HEALTH, MAINNET, SILICON_CONTRACTS, VERSION } from "../config";
 import type { Context } from "../context";
-import { batch, clientOf, explain } from "../rpc";
+import { batch, explain } from "../rpc";
+import { mainnetSilicon } from "./markets";
 import { ago, bold, dim, down, heading, int, out, table, up, warn } from "../ui";
 
-// `kyzen status`: the mainnet contracts, the SI Gateway's health and the Silicon indices on testnet.
-// It never reads a pool, liquidity or a $KYZN price (SPEC 3.8).
+// `kyzen status`: the mainnet contracts, the AI Gateway's health and the Silicon markets on mainnet.
 
 interface Health {
   ok?: boolean;
@@ -26,19 +24,6 @@ async function gateway(): Promise<string> {
   }
 }
 
-/**
- * The testnet Silicon markets, counted: how many the owner has opened. No prices and no breaker
- * states, since the testnet runs on stand-in feeds and liquidation drills, whose values are not
- * market moves.
- */
-async function siliconTestnet(): Promise<string> {
-  const dep = TESTNET.addresses ? siliconDeployment(TESTNET.addresses) : null;
-  if (!TESTNET.addresses || !dep) return dim("no testnet deployment recorded");
-  const { state } = await readSilicon(clientOf(TESTNET), TESTNET, TESTNET.addresses.token, dep, TESTNET.rpcUrl, () => undefined);
-  const open = state.markets.filter((m) => m.open);
-  return `${open.length} of ${state.markets.length} markets open ${dim(`(${open.map((m) => m.symbol).join(", ")} · stand-in feeds)`)}`;
-}
-
 export async function status(ctx: Context): Promise<void> {
   out(heading("Status"));
   out();
@@ -54,15 +39,20 @@ export async function status(ctx: Context): Promise<void> {
   out(table(deployed, ["left", "left", "left"]));
   out();
 
-  out(bold("SI Gateway"));
+  out(bold("AI Gateway"));
   out(`  ${GATEWAY_HEALTH}  ${await gateway()}`);
   out();
 
   out(bold("Silicon"));
-  out(`  mainnet  ${dim("not deployed yet")}`);
   try {
-    out(`  testnet  ${await siliconTestnet()}`);
+    const s = await mainnetSilicon(ctx);
+    if (!s) out(`  ${dim("no Silicon deployment recorded on mainnet")}`);
+    else {
+      const open = s.markets.filter((m) => m.open);
+      out(`  ${SILICON_CONTRACTS.length} contracts deployed ${dim("· kSynthetics:")} ${s.markets.map((m) => m.symbol).join(", ")}`);
+      out(`  ${open.length} of ${s.markets.length} markets open ${dim(`· $KYZN oracle ${s.kyznUsd === null ? "gathering observations" : "pricing"}`)} ${dim("· kyzen markets for the detail")}`);
+    }
   } catch (e) {
-    out(`  testnet  ${warn(`could not be read (${explain(e)})`)}`);
+    out(`  ${warn(`could not be read (${explain(e)})`)}`);
   }
 }

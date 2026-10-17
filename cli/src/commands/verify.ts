@@ -1,10 +1,10 @@
 import { keccak256, type Address, type Hex } from "viem";
-import { CONTRACTS, MAINNET, SOURCIFY } from "../config";
+import { CONTRACTS, MAINNET, SILICON_CONTRACTS, SOURCIFY } from "../config";
 import type { Context } from "../context";
 import { batch } from "../rpc";
 import { bold, dim, down, heading, out, up, warn } from "../ui";
 
-// `kyzen verify`: each mainnet Kyzen Network contract's verified source on Sourcify and the hash
+// `kyzen verify`: each mainnet Kyzen Network contract's verified source (the protocol and Silicon) on Sourcify and the hash
 // of its code on chain, read now. A contract passes when Sourcify matched its source exactly to
 // the deployed code and that code is still what the chain holds.
 
@@ -40,16 +40,17 @@ async function sourcify(address: Address): Promise<SourcifyMatch | null> {
 }
 
 export async function verify(ctx: Context): Promise<number> {
+  const ALL = CONTRACTS.concat(SILICON_CONTRACTS);
   out(heading("Verify · mainnet contracts"));
   out(dim(`Source from Sourcify, code read now from Robinhood Chain ${MAINNET.chainId}`));
   out();
-  if (CONTRACTS.length === 0) {
+  if (ALL.length === 0) {
     out("No mainnet deployment is recorded.");
     return 1;
   }
-  const codes = await batch<Hex>(ctx.network.rpcUrl, CONTRACTS.map((c) => ({ method: "eth_getCode", params: [c.address, "latest"] })));
+  const codes = await batch<Hex>(ctx.network.rpcUrl, ALL.map((c) => ({ method: "eth_getCode", params: [c.address, "latest"] })));
   let failed = 0;
-  for (const [i, c] of CONTRACTS.entries()) {
+  for (const [i, c] of ALL.entries()) {
     const code = codes[i];
     const liveHash = code && code !== "0x" ? keccak256(code) : null;
     const found = await sourcify(c.address);
@@ -64,6 +65,6 @@ export async function verify(ctx: Context): Promise<number> {
     out(`      ${dim("explorer")}  ${MAINNET.explorerUrl}/address/${c.address}`);
     out();
   }
-  out(failed === 0 ? up(`All ${CONTRACTS.length} contracts verified.`) : down(`${failed} of ${CONTRACTS.length} contracts did not pass.`));
+  out(failed === 0 ? up(`All ${ALL.length} contracts verified.`) : down(`${failed} of ${ALL.length} contracts did not pass.`));
   return failed === 0 ? 0 : 1;
 }
