@@ -12,13 +12,13 @@ npm i -g kyzen-cli
 
 The command it installs is `kyzen`.
 
-The same package is served by Kyzen Network itself: `npm i -g https://kyzen.network/dl/kyzen-0.2.0.tgz`.
+The same package is served by Kyzen Network itself: `npm i -g https://kyzen.network/dl/kyzen-0.2.1.tgz`.
 
 ## Commands
 
 | Command | Shows |
 |---|---|
-| `kyzen token` | $KYZN: its price from the Silicon $KYZN oracle, market cap, supply, burned, staked, the Reserve and the backing per token |
+| `kyzen token` | $KYZN: its pool price, market cap and liquidity, the Silicon $KYZN oracle's price, supply, burned, staked, the Reserve and the backing per token |
 | `kyzen markets` | The four kSynthetics markets on mainnet: index level, limit, minted, open or closed, fees and the mint window |
 | `kyzen silicon [--watch]` | The seven chip stock feeds (NVDA, AMD, MU, SNDK, TSM, INTC, ASML): price, stage, the last 16 rounds, last update |
 | `kyzen index <name>` | A stage index (kDESIGN, kMEMORY, kFAB, kEQUIP): its basket, its methodology, each component's live price and its move over 24 hours and 7 days, then its level and market on mainnet |
@@ -31,7 +31,7 @@ Options: `--rpc <url>` reads through another Robinhood Chain RPC; `--no-color` (
 
 ## What it reads
 
-Chainlink feeds and contracts on Robinhood Chain (chain ID 4663) through the public RPC and Multicall3, the Silicon vault and $KYZN oracle, contract sources on Sourcify, and the AI Gateway's health at `https://app.kyzen.network/v1/health`. Nothing else, and nothing is sent.
+Chainlink feeds and contracts on Robinhood Chain (chain ID 4663) through the public RPC and Multicall3, the $KYZN pool, the Silicon vault and $KYZN oracle, contract sources on Sourcify, and the AI Gateway's health at `https://app.kyzen.network/v1/health`. Nothing else, and nothing is sent.
 
 Docs: https://docs.kyzen.network/cli · Source: https://github.com/KyzenNetwork/cli
 

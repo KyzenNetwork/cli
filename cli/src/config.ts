@@ -9,7 +9,7 @@ import { HOSTS } from "../../src/lib/hosts";
 // the stock feeds (src/data/stock-feeds.ts), the four stage indices' baskets (the docs' indices.ts),
 // the recorded deployments (src/data/deployments.ts) and the public hosts (src/lib/hosts.ts).
 
-export const VERSION = "0.2.0";
+export const VERSION = "0.2.1";
 
 export const MAINNET: Network = networks.mainnet;
 export const TESTNET: Network = networks.testnet;
